@@ -1,24 +1,19 @@
 const nodemailer = require("nodemailer");
-
+require('dotenv').config();
 //Nodemailer
 //transporter configuration
-const transporter = nodemailer.createTransport({
-  host: "smtppro.zoho.in",
-  port: 465,
-  secure: true,
-  auth: {
-    user: process.env.email,
-    pass: process.env.password //use application specific password from zoho
-  },
-  tls:{
-      rejectUnauthorized:false
-    }
-});
+ const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.SENDER_MAIL,
+        pass: process.env.SMTP_PASS,
+      },
+    });
 
 //Send OTP via Email
 exports.sendOTPByEmail = (email, otp) => {
   const mailOptions = {
-    from: '"Node Project" <' + process.env.email + '>',
+    from: '"Node Project" <' + process.env.SENDER_MAIL + '>',
     to: email,
     subject: "OTP Verification",
     text: `Your OTP: ${otp}`
@@ -32,7 +27,3 @@ exports.sendOTPByEmail = (email, otp) => {
     }
   });
 };
-
-//reference
-//https://stackoverflow.com/questions/65983495/nodemailer-invalid-login-535-authentication-failed
-
